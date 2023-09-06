@@ -18,8 +18,8 @@ app.post('/ussd', (req, res) => {
             } = req.body;
 
             //let response = '';
-            response = `END Welcome to the LASRRA USSD service
-            Your phone number is ${phoneNumber}`;
+            response = `END Welcome to the LASRRA USSD service \n`;
+            response += `Your phone number is ${phoneNumber}`;
 
             // if (text == '') {
             //     // This is the first request. Note how we start the response with CON
