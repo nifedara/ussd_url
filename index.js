@@ -18,7 +18,7 @@ app.post('/ussd', (req, res) => {
             } = req.body;
 
             //let response = '';
-            response = `END Welcome to the LASRRA USSD service \n
+            response = `END Welcome to the LASRRA USSD service
             Your phone number is ${phoneNumber}`;
 
             // if (text == '') {
