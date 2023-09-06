@@ -21,7 +21,7 @@ app.post('/ussd', (req, res) => {
 
         if (text == '') {
             // This is the first request. Note how we start the response with CON
-            response = `Welcome to the LASRRA USSD service`;
+            response = `END Welcome to the LASRRA USSD service`;
             //CON What would you like to check
         //1. My account
         //2. My phone number
