@@ -17,30 +17,33 @@ app.post('/ussd', (req, res) => {
                 text,
             } = req.body;
 
-            //let response = '';
-            response = `END Welcome to the LASRRA USSD service \n`;
-            response += `Your phone number is ${phoneNumber}`;
 
-            // if (text == '') {
-            //     // This is the first request. Note how we start the response with CON
-            //     response = `CON What would you like to check
-            //     1. My account
-            //     2. My phone number `;
-            // }
-            // else if (text == '1') {
-            //     // Business logic for first level response
-            //     response = `CON Choose account information you want to view
-            //     1. Account number`;
-            // } else if (text == '2') {
-            //     // Business logic for first level response
-            //     // This is a terminal request. Note how we start the response with END
-            //     response = `END Your phone number is ${phoneNumber}`;
-            // } else if (text == '1*1') {
-            //     // This is a second level response where the user selected 1 in the first instance
-            //     const accountNumber = 'ACC100101';
-            //     // This is a terminal request. Note how we start the response with END
-            //     response = `END Your account number is ${accountNumber}`;
-            // }
+
+            if ((String(phoneNumber)).startsWith("080" || "070")){
+                response = `END Welcome to the LASRRA USSD service \n`;
+                response += `card status: your card is being processed`;
+            }
+            else{
+                response = `CON Welcome to the LASRRA USSD service \n`;
+                response += `card status: record not found\n \t`;
+                response += `0. more options`;
+
+
+                if (text == '0') {
+                    response = `CON 1. check with Lasrra ID`;
+                }
+                else if (text == '0*1') {
+                    response = `CON This will cost you N50
+                    1. continue`;
+                }
+                else if (text == '0*1*1') {
+                    response = `CON Enter your Lasrra ID`;
+                }
+                else if (String(text).split(" ").includes("LA" || "LR")) {
+                    response = `END card status: your card is ready`;
+                }
+                
+            }
 
             // Send the response back to the API
             res.set('Content-Type: text/plain');
