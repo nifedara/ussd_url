@@ -19,28 +19,28 @@ app.post('/ussd', (req, res) => {
 
 
 
-            if ((String(phoneNumber)).startsWith("080" || "070")){
+            if ((String(phoneNumber)).startsWith("+23480" || "+23470")){
                 response = `END Welcome to the LASRRA USSD service \n`;
-                response += `card status: your card is being processed`;
+                response += `CARD STATUS: your card is being processed`;
             }
             else{
-                response = `CON Welcome to the LASRRA USSD service \n`;
-                response += `card status: record not found\n \t`;
+                response = `CON Welcome to the LASRRA USSD service \n\n`;
+                response += `CARD STATUS: record not found\n`;
                 response += `0. more options`;
 
 
                 if (text == '0') {
-                    response = `CON 1. check with Lasrra ID`;
+                    response = `CON 1. Check with Lasrra ID`;
                 }
                 else if (text == '0*1') {
-                    response = `CON This will cost you N50
-                    1. continue`;
+                    response = `CON This will cost you N50`;
+                    response += `1. Continue`;
                 }
                 else if (text == '0*1*1') {
                     response = `CON Enter your Lasrra ID`;
                 }
-                else if (String(text).split(" ").includes("LA" || "LR")) {
-                    response = `END card status: your card is ready`;
+                else if (String(text).includes("LA" || "LR")) {
+                    response = `END CARD STATUS: Your card is ready`;
                 }
                 
             }
