@@ -17,10 +17,10 @@ app.post('/ussd', (req, res) => {
                 text,
             } = req.body;
 
+            var phone = (String(phoneNumber));
 
-
-            if ((String(phoneNumber)).startsWith("+23480" || "+23470")){
-                response = `END Welcome to the LASRRA USSD service \n`;
+            if (phone.startsWith("+23470") || phone.startsWith("+23480")){
+                response = `END Welcome to the LASRRA USSD service \n\n`;
                 response += `CARD STATUS: your card is being processed`;
             }
             else{
@@ -33,13 +33,13 @@ app.post('/ussd', (req, res) => {
                     response = `CON 1. Check with Lasrra ID`;
                 }
                 else if (text == '0*1') {
-                    response = `CON This will cost you N50`;
+                    response = `CON This will cost you N50\n`;
                     response += `1. Continue`;
                 }
                 else if (text == '0*1*1') {
                     response = `CON Enter your Lasrra ID`;
                 }
-                else if (String(text).includes("LA" || "LR")) {
+                else if (String(text).includes("LA" || "LR" || "la" || "lr")) {
                     response = `END CARD STATUS: Your card is ready`;
                 }
                 
