@@ -39,7 +39,7 @@ app.post('/ussd', (req, res) => {
                 else if (text == '0*1*1') {
                     response = `CON Enter your Lasrra ID`;
                 }
-                else if (String(text).includes("LA" || "LR" || "la" || "lr")) {
+                else if (String(text).includes("LA") || String(text).includes("LR") ) {
                     response = `END CARD STATUS: Your card is ready`;
                 }
                 
