@@ -1,53 +1,38 @@
-const express = require('express');
+import {
+    createContinueResponse,
+    createEndResponse,
+    getCardStatusByLasrraId,
+    getCardStatusByPhoneNumber
+  } from "./ussdServices";
 
+const express = require('express');
 const app = express();
 
 const port = process.env.PORT || 5000;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-app.post('/ussd', (req, res) => {
+app.post('/ussd', async(req, res) => {
     try {
         if (req.body) {
-            // Read the variables sent via POST from our API
-            const {
-                sessionId,
-                serviceCode,
-                phoneNumber,
-                text,
-            } = req.body;
+            
+            const { msisdn, network, session, text, shortcode, id } = req.body;
+            const statusByPhone = await getCardStatusByPhoneNumber(msisdn);
 
-            var phone = (String(phoneNumber));
-
-            if (phone.startsWith("+23470") || phone.startsWith("+23480")){
-                response = `END Welcome to the LASRRA USSD service \n\n`;
-                response += `CARD STATUS: your card is being processed`;
-            }
-            else{
-                response = `CON Welcome to the LASRRA USSD service \n\n`;
-                response += `CARD STATUS: record not found\n`;
-                response += `0. more options`;
-
-
-                if (text == '0') {
-                    response = `CON 1. Check with Lasrra ID`;
-                }
-                else if (text == '0*1') {
-                    response = `CON This will cost you N50\n`;
-                    response += `1. Continue`;
-                }
-                else if (text == '0*1*1') {
-                    response = `CON Enter your Lasrra ID`;
-                }
-                else if (String(text).includes("LA") || String(text).includes("LR") ) {
-                    response = `END CARD STATUS: Your card is ready`;
-                }
-                
+            if (statusByPhone && statusByPhone.code === "00") {
+                responseText = `Welcome to the LASRRA USSD service \n\nCARD STATUS: ${statusByPhone.cardStatus}`;
+                sessionState.step = session_steps.start;
+                response = createEndResponse(msisdn, network, shortcode, responseText);
+            
+            } 
+            else {
+                responseText = `Welcome to the LASRRA USSD service \n\nCARD STATUS: record not found\n0. more options`;
+                sessionState.step = session_steps.main_menu;
+                response = createContinueResponse(msisdn, network, shortcode, responseText);
             }
 
-            // Send the response back to the API
-            res.set('Content-Type: text/plain');
-            res.send(response);
+            res.status(200).json(response);
+            console.log(req)
         } else {
             console.log("yepa")
             res.status(403).json({ message: "data incomplete" })
@@ -59,6 +44,3 @@ app.post('/ussd', (req, res) => {
 });
 
 app.listen(port, console.log(`server running on port ${port}`));
-
-
-//response = `END Welcome to the LASRRA USSD service`;
