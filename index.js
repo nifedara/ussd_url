@@ -1,11 +1,19 @@
-import {
-    createContinueResponse,
-    createEndResponse,
-    getCardStatusByLasrraId,
-    getCardStatusByPhoneNumber
-  } from "./ussdServices";
+// import {
+//     createContinueResponse,
+//     createEndResponse,
+//     getCardStatusByPhoneNumber
+//   } from "./ussdServices.cjs";
 
-const express = require('express');
+// const express = require('express');
+// const app = express();
+
+import express from 'express';
+import {
+  createContinueResponse,
+  createEndResponse,
+  getCardStatusByPhoneNumber
+} from "./ussdServices.js";
+
 const app = express();
 
 const port = process.env.PORT || 5000;
