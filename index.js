@@ -29,13 +29,11 @@ app.post('/ussd', async(req, res) => {
 
             if (statusByPhone && statusByPhone.code === "00") {
                 responseText = `Welcome to the LASRRA USSD service \n\nCARD STATUS: ${statusByPhone.cardStatus}`;
-                sessionState.step = session_steps.start;
                 response = createEndResponse(msisdn, network, shortcode, responseText);
             
             } 
             else {
                 responseText = `Welcome to the LASRRA USSD service \n\nCARD STATUS: record not found\n0. more options`;
-                sessionState.step = session_steps.main_menu;
                 response = createContinueResponse(msisdn, network, shortcode, responseText);
             }
 
