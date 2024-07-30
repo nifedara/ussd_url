@@ -17,7 +17,7 @@ app.post('/ussd', (req, res) => {
         if (req.body) {
             const { msisdn, network, session, text, shortcode, id } = req.body;
 
-            if (msisdn.startsWith("+23470") || msisdn.startsWith("+23480")){
+            if (msisdn.startsWith("+23470") || msisdn.startsWith("+23480") || msisdn.startsWith("080") || msisdn.startsWith("070")){
                 response = `Welcome to the LASRRA USSD service \n\n`;
             }
             else{
