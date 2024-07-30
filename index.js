@@ -1,10 +1,16 @@
-
 const express = require('express');
 const app = express();
 
 const port = process.env.PORT || 5100;
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Middleware to log requests
+app.use((req, res, next) => {
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  console.log(`Body: ${JSON.stringify(req.body)}`);
+  next();
+});
 
 app.post('/ussd', (req, res) => {
     try {
@@ -18,14 +24,12 @@ app.post('/ussd', (req, res) => {
                 response = `Welcome to the LASRRA USSD service \n\n0. more options`;
             }
 
-            res.set('Content-Type: text/plain');
             res.send(response);
         }
     } catch (e) {
-        console.log("Error", e)
-        return res.status(500).json({ message: e })
+        console.error("Error", e);
+        return res.status(500).json({ message: e.message });
     }
 });
 
-
-app.listen(port, console.log(`server running on port ${port}`));
+app.listen(port, () => console.log(`server running on port ${port}`));
