@@ -12,7 +12,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.post('/ussd', (req, res) => {
+app.post('', (req, res) => {
     try {
         if (req.body) {
             const { msisdn, network, session, text, shortcode, id } = req.body;
