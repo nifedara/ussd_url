@@ -8,7 +8,7 @@ app.use(express.urlencoded({ extended: false }));
 // Middleware to log requests
 app.use((req, res, next) => {
   console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-  console.log(`Body: ${JSON.stringify(req.body)}`);
+  console.log(`Body of request: ${req.body}`);
   //console.log(`Response: ${JSON.stringify(res)}`);
   next();
 });
@@ -43,35 +43,69 @@ app.post('', (req, res) => {
                 },
                 id,
                 network,
-                session,
+                "session": { "type": { code, name } },
                 shortcode,
                 text
               } = req.body;
 
-            if (msisdn.startsWith("+23470") || msisdn.startsWith("+23480") || msisdn.startsWith("080") || msisdn.startsWith("070")){
-                ussdResponse = `Welcome to the LASRRA USSD service \n\n`;
-            }
-            else{
-                ussdResponse = `Welcome to the LASRRA USSD service \n\n0. more options`;
+            // if (msisdn.startsWith("+23470") || msisdn.startsWith("+23480") || msisdn.startsWith("080") || msisdn.startsWith("070")){
+            //     ussdResponse = `Welcome to the LASRRA USSD service \n\n`;
+            // }
+            // else{
+            //     ussdResponse = `Welcome to the LASRRA USSD service \n\n0. more options`;
+            // }
+
+            
+            if (name == "begin"){
+
+              ussdResponse = `Welcome to the LASRRA USSD service \n\n0. more options`;
+              type_code = 3;
+              type_name = "continue";
+              ui_code = 1;
+              ui_name = "input";
+
+            } else if (text == "0"){
+
+              ussdResponse = `1. Check your card status \n\n2. Relocate your card`;
+              type_code = 3;
+              type_name = "continue";
+              ui_code = 1;
+              ui_name = "input";
+
+            } else if (text == "1"){
+
+              ussdResponse = `Check your card status: Ready`;
+              type_code = 4;
+              type_name = "end";
+              ui_code = 0;
+              ui_name = "none";
+
+            } else if (text == "2"){
+
+              ussdResponse = `Card relocated`;
+              type_code = 4;
+              type_name = "end";
+              ui_code = 2;
+              ui_name = "dialog";
             }
 
             const responseObject = {
-                "msisdn": msisdn, 
-                "network": network, 
-                "op_type": ussd_op_type, 
-                "session": {
-                    "type": { 
-                        "code": 3, 
-                        "name": "continue" 
-                    },
-                    "ui": { 
-                        "code": 1, 
-                        "name": "input" 
-                    }
-                },
-                "shortcode": "", 
-                "text": ussdResponse
-              };
+              "msisdn": msisdn, 
+              "network": network, 
+              "op_type": ussd_op_type, 
+              "session": {
+                  "type": { 
+                      "code": type_code, 
+                      "name": type_name 
+                  },
+                  "ui": { 
+                      "code": ui_code, 
+                      "name": ui_name 
+                  }
+              },
+              "shortcode": "", 
+              "text": ussdResponse
+            };
               
             res.json(responseObject);
         }
